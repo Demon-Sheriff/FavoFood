@@ -3,7 +3,6 @@ import 'package:meals_app/models/category.dart';
 import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/screens/categories.dart';
 import 'package:meals_app/screens/meals.dart';
-import 'package:meals_app/widgets/favorites_list.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -18,15 +17,27 @@ class _TabsScreenState extends State<TabsScreen> {
   List<Meal> favoriteMeals = [];
   var _currentBottomNavigationBarIndex = 0;
 
-  void _toggleMealFunctionStatus() {
+  void _toggleMealFunctionStatus(Meal meal) {
+    bool exists = favoriteMeals.contains(meal);
 
+    if (exists) {
+      setState(() {
+        favoriteMeals.remove(meal);
+      });
+    } else {
+      setState(() {
+        favoriteMeals.add(meal);
+      });
+    }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     var activePageTitle = 'Categories';
 
-    Widget bodyContent = const Categories();
+    Widget bodyContent = Categories(
+      addToFavorites: _toggleMealFunctionStatus,
+    );
     if (_currentBottomNavigationBarIndex == 1) {
       bodyContent = Meals(
         category: Category(
@@ -34,6 +45,9 @@ class _TabsScreenState extends State<TabsScreen> {
           title: 'Favorites',
         ),
         mealsList: favoriteMeals,
+        addToFavorites: (meal) {
+          _toggleMealFunctionStatus(meal);
+        },
       );
 
       activePageTitle = 'Your Favorites';

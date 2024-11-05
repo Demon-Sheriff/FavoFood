@@ -7,7 +7,7 @@ import 'package:transparent_image/transparent_image.dart';
 
 class MealDetails extends StatelessWidget {
   final Meal meal;
-  final void Function() addToFavorites;
+  final void Function(Meal meal) addToFavorites;
   const MealDetails({super.key, required this.meal, required this.addToFavorites});
 
   @override
@@ -24,7 +24,7 @@ class MealDetails extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              addToFavorites();
+              addToFavorites(meal);
             },
             icon: const Icon(
               Icons.star,

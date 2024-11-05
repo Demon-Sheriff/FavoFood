@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:meals_app/data/dummy_data.dart';
+import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/widgets/category_card.dart';
 
 class Categories extends StatelessWidget {
-  const Categories({super.key});
+
+  final void Function(Meal meal) addToFavorites;
+  const Categories({super.key, required this.addToFavorites});
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +22,7 @@ class Categories extends StatelessWidget {
         (element) {
           return CategoryCard(
             category: element,
+            addToFavorites: addToFavorites,
           );
         },
       ).toList(),

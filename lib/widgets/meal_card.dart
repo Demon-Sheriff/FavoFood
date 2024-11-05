@@ -111,7 +111,7 @@ class MealCard extends StatelessWidget {
 // another way to make meal card
 class MealCardUsingStack extends StatelessWidget {
   final Meal meal;
-  final void Function() addToFavorites;
+  final void Function(Meal meal) addToFavorites;
   const MealCardUsingStack({super.key, required this.meal, required this.addToFavorites});
 
   @override
