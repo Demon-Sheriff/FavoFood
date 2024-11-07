@@ -6,7 +6,8 @@ import 'package:meals_app/widgets/category_card.dart';
 class Categories extends StatelessWidget {
 
   final void Function(Meal meal) addToFavorites;
-  const Categories({super.key, required this.addToFavorites});
+  final List<Meal> preferredMeals;
+  const Categories({super.key, required this.addToFavorites, required this.preferredMeals});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,7 @@ class Categories extends StatelessWidget {
           return CategoryCard(
             category: element,
             addToFavorites: addToFavorites,
+            preferredMeals: preferredMeals,
           );
         },
       ).toList(),

@@ -60,10 +60,25 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     var activePageTitle = 'Categories';
-    // final availableMeals = dummyMeals.where((element) {
-    //   if(filterStates[GlutenFree])
-    // },);
+    final availableMeals = dummyMeals.where((meal) {
+      if (filterStates[Filter.glutenFree]! && !meal.isGlutenFree) {
+        return false;
+      }
+      if (filterStates[Filter.lactoseFree]! && !meal.isLactoseFree) {
+        return false;
+      }
+      if (filterStates[Filter.vegetarian]! && !meal.isVegetarian) {
+        return false;
+      }
+      if (filterStates[Filter.vegan]! && !meal.isVegan) {
+        return false;
+      }
+
+      return true;
+    }).toList();
+
     Widget bodyContent = Categories(
+      preferredMeals: availableMeals,
       addToFavorites: _toggleMealFunctionStatus,
     );
     if (_currentBottomNavigationBarIndex == 1) {
