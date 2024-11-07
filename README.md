@@ -1,6 +1,14 @@
 # meals_app
 
-A new Flutter project.
+Save you favorite meals !
+
+## Project Demo
+
+
+https://github.com/user-attachments/assets/70f87d3c-b31d-45e7-8d68-103cd07d5bf6
+
+
+
 
 ## Getting Started
 
