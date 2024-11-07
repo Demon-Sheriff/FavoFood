@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/data/dummy_data.dart';
 import 'package:meals_app/models/category.dart';
 import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/screens/categories.dart';
+import 'package:meals_app/screens/filters.dart';
 import 'package:meals_app/screens/meals.dart';
+import 'package:meals_app/widgets/main_drawer.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -16,6 +19,27 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   List<Meal> favoriteMeals = [];
   var _currentBottomNavigationBarIndex = 0;
+  Map<Filter, bool> filterStates = {
+    Filter.glutenFree: false,
+    Filter.lactoseFree: false,
+    Filter.vegetarian: false,
+    Filter.vegan: false,
+  };
+
+  void showInfoMessage(String message, Meal meal) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            _toggleMealFunctionStatus(meal);
+          },
+        ),
+      ),
+    );
+  }
 
   void _toggleMealFunctionStatus(Meal meal) {
     bool exists = favoriteMeals.contains(meal);
@@ -24,9 +48,11 @@ class _TabsScreenState extends State<TabsScreen> {
       setState(() {
         favoriteMeals.remove(meal);
       });
+      showInfoMessage("${meal.title} removed from Favorites", meal);
     } else {
       setState(() {
         favoriteMeals.add(meal);
+        showInfoMessage("${meal.title} added to Favorites", meal);
       });
     }
   }
@@ -34,7 +60,9 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     var activePageTitle = 'Categories';
-
+    // final availableMeals = dummyMeals.where((element) {
+    //   if(filterStates[GlutenFree])
+    // },);
     Widget bodyContent = Categories(
       addToFavorites: _toggleMealFunctionStatus,
     );
@@ -56,6 +84,33 @@ class _TabsScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(
           activePageTitle,
+        ),
+      ),
+      drawer: SafeArea(
+        // minimum: const EdgeInsets.only(top: 40),
+        child: MainDrawer(
+          onSelectScreen: (type) async {
+            Navigator.of(context).pop(true);
+            var res = await Navigator.of(context).push<Map<Filter, bool>>(
+              MaterialPageRoute(
+                builder: (context) {
+                  return type == 'Meals'
+                      ? const TabsScreen()
+                      : const FilterScreen();
+                },
+              ),
+            );
+
+            setState(() {
+              filterStates = res ??
+                  {
+                    Filter.glutenFree: false,
+                    Filter.lactoseFree: false,
+                    Filter.vegetarian: false,
+                    Filter.vegan: false,
+                  };
+            });
+          },
         ),
       ),
       body: bodyContent,

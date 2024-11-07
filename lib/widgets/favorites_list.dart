@@ -5,8 +5,6 @@ class FavoritesList extends StatelessWidget {
   final List<Meal> favoriteMeals;
   const FavoritesList({super.key, required this.favoriteMeals});
 
-  
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
