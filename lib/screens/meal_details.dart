@@ -29,10 +29,10 @@ class MealDetails extends ConsumerWidget {
                   .read(favoriteMealsProvider.notifier)
                   .toggleFavoritesButton(meal, context);
               // addToFavorites(meal);
-              ref.read(favoritesButtonColorProvider.notifier).toggleColor();
+              // ref.read(favoritesButtonColorProvider.notifier).toggleColor();
             },
             icon: Icon(
-              Icons.star,
+              Icons.favorite,
               color: ref.watch(favoritesButtonColorProvider),
             ),
           )

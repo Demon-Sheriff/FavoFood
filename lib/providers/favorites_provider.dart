@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:meals_app/models/meal.dart';
 import 'package:riverpod/riverpod.dart';
 
-
 final favoriteMealsProvider =
     StateNotifierProvider<FavoriteMealsNotifier, List<Meal>>((ref) {
-  return FavoriteMealsNotifier();
+  return FavoriteMealsNotifier(ref: ref);
 });
 
 class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
-  FavoriteMealsNotifier() : super([]);
+  final Ref ref;
+  FavoriteMealsNotifier({required this.ref}) : super([]);
 
   void toggleFavoritesButton(Meal meal, BuildContext context) {
     bool doesExist = state.contains(meal);
@@ -20,6 +20,9 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
     } else {
       addToFavorites(meal);
     }
+
+    // toggle the color of th button.
+    ref.read(favoritesButtonColorProvider.notifier).toggleColor();
 
     // finally show the info bar
     _showInfoBar(meal, context, message);
@@ -51,19 +54,18 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
   }
 }
 
-
-final favoritesButtonColorProvider = StateNotifierProvider<FavoritesButtonColorNotifier, Color>((ref) {
+final favoritesButtonColorProvider =
+    StateNotifierProvider<FavoritesButtonColorNotifier, Color>((ref) {
   return FavoritesButtonColorNotifier();
 });
 
-class FavoritesButtonColorNotifier extends StateNotifier<Color>{
+class FavoritesButtonColorNotifier extends StateNotifier<Color> {
   FavoritesButtonColorNotifier() : super(Colors.white);
 
   void toggleColor() {
-    if(state == Colors.white){
-      state = Colors.yellowAccent;
-    }
-    else{
+    if (state == Colors.white) {
+      state = Colors.redAccent;
+    } else {
       state = Colors.white;
     }
   }
