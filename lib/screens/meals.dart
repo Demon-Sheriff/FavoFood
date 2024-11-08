@@ -6,12 +6,10 @@ import 'package:meals_app/widgets/meal_card.dart';
 class Meals extends StatelessWidget {
   final Category category;
   final List<Meal> mealsList;
-  final void Function(Meal meal) addToFavorites;
-  const Meals({super.key, required this.category, required this.mealsList, required this.addToFavorites});
+  const Meals({super.key, required this.category, required this.mealsList,});
 
   @override
   Widget build(BuildContext context) {
-    // final temp = [];
     
     Widget dataEmptyContent = Center(
       child: Column(
@@ -45,7 +43,6 @@ class Meals extends StatelessWidget {
             itemBuilder: (ctx, index) {
               return MealCardUsingStack(
                 meal: mealsList[index],
-                addToFavorites: addToFavorites,
               );
             },
           );

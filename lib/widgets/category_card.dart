@@ -5,12 +5,10 @@ import 'package:meals_app/screens/meals.dart';
 
 class CategoryCard extends StatelessWidget {
   final Category category;
-  final void Function(Meal meal) addToFavorites;
   final List<Meal> preferredMeals;
   const CategoryCard(
       {super.key,
       required this.category,
-      required this.addToFavorites,
       required this.preferredMeals});
 
   void _selectCategory(BuildContext context, Category category) {
@@ -24,7 +22,6 @@ class CategoryCard extends StatelessWidget {
         return Meals(
           category: category,
           mealsList: filteredMeals,
-          addToFavorites: addToFavorites,
         );
       },
     );
