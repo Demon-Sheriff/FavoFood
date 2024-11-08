@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meals_app/models/meal.dart';
 import 'package:riverpod/riverpod.dart';
 
+
 final favoriteMealsProvider =
     StateNotifierProvider<FavoriteMealsNotifier, List<Meal>>((ref) {
   return FavoriteMealsNotifier();
@@ -47,5 +48,23 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
     state = state.where((currMeal) {
       return (currMeal != meal);
     }).toList();
+  }
+}
+
+
+final favoritesButtonColorProvider = StateNotifierProvider<FavoritesButtonColorNotifier, Color>((ref) {
+  return FavoritesButtonColorNotifier();
+});
+
+class FavoritesButtonColorNotifier extends StateNotifier<Color>{
+  FavoritesButtonColorNotifier() : super(Colors.white);
+
+  void toggleColor() {
+    if(state == Colors.white){
+      state = Colors.yellowAccent;
+    }
+    else{
+      state = Colors.white;
+    }
   }
 }

@@ -27,8 +27,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     Filter.vegan: false,
   };
 
-  void showInfoMessage(String message, Meal meal) {}
-
   @override
   Widget build(BuildContext context) {
     var activePageTitle = 'Categories';
