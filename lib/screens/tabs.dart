@@ -105,13 +105,15 @@ class _TabsScreenState extends State<TabsScreen> {
         // minimum: const EdgeInsets.only(top: 40),
         child: MainDrawer(
           onSelectScreen: (type) async {
-            Navigator.of(context).pop(true);
+            Navigator.of(context).pop();
             var res = await Navigator.of(context).push<Map<Filter, bool>>(
               MaterialPageRoute(
                 builder: (context) {
                   return type == 'Meals'
                       ? const TabsScreen()
-                      : const FilterScreen();
+                      : FilterScreen(
+                          currFilters: filterStates,
+                        );
                 },
               ),
             );
