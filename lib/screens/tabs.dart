@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_app/data/dummy_data.dart';
 import 'package:meals_app/models/category.dart';
-import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/providers/favorites_provider.dart';
+import 'package:meals_app/providers/filters_provider.dart';
 import 'package:meals_app/screens/categories.dart';
 import 'package:meals_app/screens/filters.dart';
 import 'package:meals_app/screens/meals.dart';
@@ -20,27 +20,22 @@ class TabsScreen extends ConsumerStatefulWidget {
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
   var _currentBottomNavigationBarIndex = 0;
-  Map<Filter, bool> filterStates = {
-    Filter.glutenFree: false,
-    Filter.lactoseFree: false,
-    Filter.vegetarian: false,
-    Filter.vegan: false,
-  };
 
   @override
   Widget build(BuildContext context) {
     var activePageTitle = 'Categories';
+    final activeFilters = ref.watch(filtersProvider);
     final availableMeals = dummyMeals.where((meal) {
-      if (filterStates[Filter.glutenFree]! && !meal.isGlutenFree) {
+      if (activeFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
         return false;
       }
-      if (filterStates[Filter.lactoseFree]! && !meal.isLactoseFree) {
+      if (activeFilters[Filter.lactoseFree]! && !meal.isLactoseFree) {
         return false;
       }
-      if (filterStates[Filter.vegetarian]! && !meal.isVegetarian) {
+      if (activeFilters[Filter.vegetarian]! && !meal.isVegetarian) {
         return false;
       }
-      if (filterStates[Filter.vegan]! && !meal.isVegan) {
+      if (activeFilters[Filter.vegan]! && !meal.isVegan) {
         return false;
       }
 
@@ -57,7 +52,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
           id: '1',
           title: 'Favorites',
         ),
-        mealsList: favoriteList,
+        mealsList: availableMeals,
       );
 
       activePageTitle = 'Your Favorites';
@@ -73,27 +68,15 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         child: MainDrawer(
           onSelectScreen: (type) async {
             Navigator.of(context).pop();
-            var res = await Navigator.of(context).push<Map<Filter, bool>>(
+            await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
                   return type == 'Meals'
                       ? const TabsScreen()
-                      : FilterScreen(
-                          currFilters: filterStates,
-                        );
+                      : const FilterScreen();
                 },
               ),
             );
-
-            setState(() {
-              filterStates = res ??
-                  {
-                    Filter.glutenFree: false,
-                    Filter.lactoseFree: false,
-                    Filter.vegetarian: false,
-                    Filter.vegan: false,
-                  };
-            });
           },
         ),
       ),

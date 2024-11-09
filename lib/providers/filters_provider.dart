@@ -20,7 +20,11 @@ class FiltersNotifier extends StateNotifier<Map<Filter, bool>> {
           },
         );
 
+  void setFilterMap(Map<Filter, bool> currMap) {
+    state = currMap;
+  }
   void setFilter(Filter filter, bool isActive) {
+    // take the old map and override the changed key.
     state = {
       ...state,
       filter: isActive,
