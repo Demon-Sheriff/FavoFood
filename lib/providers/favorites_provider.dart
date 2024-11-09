@@ -11,7 +11,7 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
   final Ref ref;
   FavoriteMealsNotifier({required this.ref}) : super([]);
 
-  void toggleFavoritesButton(Meal meal, BuildContext context) {
+  Future<void> toggleFavoritesButton(Meal meal, BuildContext context) async {
     bool doesExist = state.contains(meal);
     String message = "${meal.title} added to favorites";
     if (doesExist) {
@@ -21,14 +21,17 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
       addToFavorites(meal);
     }
 
-    // toggle the color of th button.
-    ref.read(favoritesButtonColorProvider.notifier).toggleColor();
-
-    // finally show the info bar
-    _showInfoBar(meal, context, message);
+    // run the two functions simultaneously.
+    await Future.wait([
+      // toggle the color of the button.
+      ref.read(favoritesButtonColorProvider.notifier).toggleColor(),
+      // finally show the info bar
+      _showInfoBar(meal, context, message),
+    ]);
   }
 
-  void _showInfoBar(Meal meal, BuildContext context, String message) {
+  Future<void> _showInfoBar(
+      Meal meal, BuildContext context, String message) async {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -62,7 +65,7 @@ final favoritesButtonColorProvider =
 class FavoritesButtonColorNotifier extends StateNotifier<Color> {
   FavoritesButtonColorNotifier() : super(Colors.white);
 
-  void toggleColor() {
+  Future<void> toggleColor() async {
     if (state == Colors.white) {
       state = Colors.redAccent;
     } else {
